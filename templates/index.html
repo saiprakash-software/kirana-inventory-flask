@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kirana Inventory - Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+            margin: 20px auto;
+            max-width: 700px;
+            padding: 0 20px;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #007bff;
+        }
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        li {
+            background: white;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav {
+            margin: 20px 0;
+            text-align: center;
+        }
+        nav a {
+            text-decoration: none;
+            margin: 0 8px;
+            padding: 6px 12px;
+            color: #007bff;
+            font-weight: 600;
+            border-radius: 4px;
+            transition: background 0.2s ease-in-out;
+        }
+        nav a:hover {
+            background: #e0f0ff;
+        }
+    </style>
+</head>
+<body>
+    <h1>Kirana Inventory System</h1>
+
+    <nav>
+        <a href="{{ url_for('add_shop') }}">Add Shop</a>
+        <a href="{{ url_for('add_product') }}">Add Product</a>
+        <a href="{{ url_for('add_customer') }}">Add Customer</a>
+        <a href="{{ url_for('place_order') }}">Place Order</a>
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+    </nav>
+
+    <h2>Shops List</h2>
+    <ul>
+        {% for shop in shops %}
+        <li>
+            {{ shop.name }}
+            <span style="font-weight: normal; font-size: 0.9em; color: #666;">
+                {{ shop.location or "Location N/A" }}
+            </span>
+        </li>
+        {% else %}
+        <li>No shops found. Add some!</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

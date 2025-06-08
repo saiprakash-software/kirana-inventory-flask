@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - Kirana Inventory</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 960px;
+            margin: 30px auto;
+            background: #f5f7fa;
+            padding: 0 20px 40px;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        nav {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        nav a {
+            color: #007bff;
+            text-decoration: none;
+            margin: 0 12px;
+            font-weight: 600;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgb(0 0 0 / 0.1);
+        }
+        h2 {
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            color: #007bff;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f1faff;
+        }
+
+        .status {
+            font-weight: bold;
+            padding: 3px 10px;
+            border-radius: 12px;
+            color: white;
+            display: inline-block;
+            font-size: 13px;
+        }
+        .status.Placed {
+            background-color: #17a2b8;
+        }
+        .status.Shipped {
+            background-color: #ffc107;
+            color: #333;
+        }
+        .status.Delivered {
+            background-color: #28a745;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            table, thead, tbody, th, td, tr {
+                display: block;
+                width: 100%;
+            }
+            thead {
+                display: none;
+            }
+            tr {
+                margin-bottom: 15px;
+                background: #fff;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                padding: 10px;
+            }
+            td {
+                padding: 10px;
+                text-align: right;
+                position: relative;
+            }
+            td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 10px;
+                top: 10px;
+                font-weight: bold;
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Dashboard</h1>
+
+    <nav>
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('add_shop') }}">Add Shop</a>
+        <a href="{{ url_for('add_product') }}">Add Product</a>
+        <a href="{{ url_for('add_customer') }}">Add Customer</a>
+        <a href="{{ url_for('place_order') }}">Place Order</a>
+    </nav>
+
+    <section>
+        <h2>Low Stock Products (Less than 5)</h2>
+        {% if low_stock %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Shop</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in low_stock %}
+                <tr>
+                    <td data-label="Product">{{ product.name }}</td>
+                    <td data-label="Shop">{{ product.shop.name if product.shop else 'N/A' }}</td>
+                    <td data-label="Quantity" style="color: #dc3545; font-weight: 700;">{{ product.quantity }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No products are low in stock.</p>
+        {% endif %}
+    </section>
+
+    <section>
+        <h2>Recent Orders</h2>
+        {% if orders %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Product</th>
+                    <th>Customer</th>
+                    <th>Quantity</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td data-label="Order ID">{{ order.id }}</td>
+                    <td data-label="Product">{{ order.product.name if order.product else 'N/A' }}</td>
+                    <td data-label="Customer">{{ order.customer.name if order.customer else 'N/A' }}</td>
+                    <td data-label="Quantity">{{ order.quantity }}</td>
+                    <td data-label="Status">
+                        <span class="status {{ order.status }}">{{ order.status }}</span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No recent orders found.</p>
+        {% endif %}
+    </section>
+</body>
+</html>
