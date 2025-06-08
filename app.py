@@ -6,14 +6,14 @@ from wtforms.validators import InputRequired
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///kirana.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://ugcaago5shp9ov5y:BusnaKLPVUpDS6FNE2h@bykghjm9x6vdugtitgzi-mysql.services.clever-cloud.com:20878/bykghjm9x6vdugtitgzi'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
 # Database models
 class Shop(db.Model):
-    __tablename__ = 'shop'  # Ensure it matches table used in queries
+    __tablename__ = 'shop'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     location = db.Column(db.String(100))
@@ -126,10 +126,8 @@ def place_order():
         return redirect(url_for('dashboard'))
     return render_template('form.html', form=form, title='Place Order')
 
-# Run server
+# Entry point
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     app.run(debug=True)
-
-
